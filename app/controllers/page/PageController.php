@@ -1,76 +1,68 @@
 <?php
+require_once 'app/models/pages/PageModel.php';
 
-require_once 'app/models/roles/Role.php';
+class PageController{
 
-class RoleController
-{
+    public function index(){
+        $pageModel = new PageModel();
+        $pages = $pageModel->getAllPages();
 
-    public function index()
-    {
-        $roleModel = new Role();
-        $roles = $roleModel->getAllRoles();
-
-        include 'app/views/roles/index.php';
+        include 'app/views/pages/index.php';
     }
 
-    public function create()
-    {
-        include 'app/views/roles/create.php';
+    public function create(){
+        include 'app/views/pages/create.php';
     }
 
-    public function store()
-    {
-        if (isset($_POST['role_name']) && isset($_POST['role_description'])) {
-            $role_name = trim($_POST['role_name']);
-            $role_description = trim($_POST['role_description']);
+    public function store(){
+        if(isset($_POST['title']) && isset($_POST['slug'])){
+            $title = trim($_POST['title']);
+            $slug = trim($_POST['slug']);
 
-            if (empty($role_name)) {
-                echo "Role name is required!";
+            if (empty($title) || empty($slug)) {
+                echo "Title and Slug fields are required!";
                 return;
             }
 
-            $roleModel = new Role();
-            $roleModel->createRole($role_name, $role_description);
+            $pageModel = new PageModel();
+            $pageModel->createPage($title, $slug);
         }
-        header("Location: index.php?page=roles");
+        header("Location: index.php?page=pages");
     }
 
-    public function edit($id)
-    {
-        $roleModel = new Role();
-        $role = $roleModel->getRoleById($id);
+    public function edit($id){
+        $pageModel = new PageModel();
+        $page = $pageModel->getPageById($id);
 
-        if (!$role) {
-            echo "Role not found";
+        if(!$page){
+            echo "Page not found";
             return;
         }
 
-        include 'app/views/roles/edit.php';
+        include 'app/views/pages/edit.php';
     }
 
-    public function update()
-    {
-        if (isset($_POST['id']) && isset($_POST['role_name']) && isset($_POST['role_description'])) {
+    public function update(){
+        if(isset($_POST['id']) && isset($_POST['title']) && isset($_POST['slug'])){
             $id = trim($_POST['id']);
-            $role_name = trim($_POST['role_name']);
-            $role_description = trim($_POST['role_description']);
+            $title = trim($_POST['title']);
+            $slug = trim($_POST['slug']);
 
-            if (empty($role_name)) {
-                echo "Role name is required";
+            if (empty($title) || empty($slug)) {
+                echo "Title and Slug fields are required!";
                 return;
             }
 
-            $roleModel = new Role();
-            $roleModel->updateRole($id, $role_name, $role_description);
+            $pageModel = new PageModel();
+            $pageModel->updatePage($id, $title, $slug);
         }
-        header("Location: index.php?page=roles");
+        header("Location: index.php?page=pages");
     }
 
-    public function delete()
-    {
-        $roleModel = new Role();
-        $roleModel->deleteRole($_GET['id']);
+    public function delete(){
+        $pageModel = new PageModel();
+        $pageModel->deletePage($_GET['id']);
 
-        header('Location: index.php?page=roles');
+        header('Location: index.php?page=pages');
     }
 }
