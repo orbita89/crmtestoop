@@ -20,7 +20,7 @@ class PageController{
             $slug = trim($_POST['slug']);
 
             if (empty($title) || empty($slug)) {
-                echo "Title and Slug fields are required!";
+                echo "Поля Title и Slug обязательны!";
                 return;
             }
 
@@ -35,7 +35,7 @@ class PageController{
         $page = $pageModel->getPageById($id);
 
         if(!$page){
-            echo "Page not found";
+            echo "Страница не найдена";
             return;
         }
 
@@ -49,7 +49,7 @@ class PageController{
             $slug = trim($_POST['slug']);
 
             if (empty($title) || empty($slug)) {
-                echo "Title and Slug fields are required!";
+                echo "Поля Title и Slug обязательны!";
                 return;
             }
 
